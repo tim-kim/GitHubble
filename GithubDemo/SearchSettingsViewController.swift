@@ -11,34 +11,37 @@ import UIKit
 class SearchSettingsViewController: UIViewController {
     
     weak var delegate: SettingsPresentingViewControllerDelegate?
-    var settings = GithubRepoSearchSettings()
+    var settings: GithubRepoSearchSettings?
+    var settingsValue: Int = 0
     
-    var minimumStars : Int = 0
+    @IBOutlet weak var starLabel: UILabel!
+    @IBOutlet weak var slider: UISlider!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        if let settings = settings {
+            starLabel.text = "\(settings.minStars)"
+            slider.value = Float(settings.minStars)
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func saveButtonTapped(_ sender: AnyObject) {
-        self.delegate?.didSaveSettings(settings: settings)
-        dismiss(animated: true, completion: nil)
+    @IBAction func saveButtonTapped(_ sender: Any) {
+        settings?.minStars = Int(slider.value)
+        self.delegate?.didSaveSettings(settings: settings!)
+        self.dismiss(animated: true, completion: nil)
     }
 
-    @IBAction func cancelButtonTapped(_ sender: AnyObject) {
+    @IBAction func cancelButtonTapped(_ sender: Any) {
         self.delegate?.didCancelSettings()
         dismiss(animated: true, completion: nil)
     }
-    
-    func sliderChange(sender: UISlider) {
-        let currentValue = sender.value
-        self.minimumStars = Int(currentValue)
+    @IBAction func onSliderChange(_ sender: Any) {
+        self.settingsValue = Int(slider.value)
+        self.starLabel.text = String(self.settingsValue)
     }
-
+    
 }

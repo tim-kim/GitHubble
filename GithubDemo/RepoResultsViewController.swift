@@ -71,14 +71,18 @@ class RepoResultsViewController: UIViewController, UITableViewDataSource, UITabl
         return cell
     }
     
+    
     func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let navController = segue.destination as! UINavigationController
         let vc = navController.topViewController as! SearchSettingsViewController
-        vc.settings = self.searchSettings  // ... Search Settings ...
+        vc.settings = self.searchSettings
         vc.delegate = self
     }
     
     func didSaveSettings(settings: GithubRepoSearchSettings) {
+        print("minstars: \(settings.minStars)")
+        self.searchSettings = settings
+        doSearch()
     }
     
     func didCancelSettings() {
